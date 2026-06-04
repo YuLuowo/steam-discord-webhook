@@ -1,9 +1,8 @@
-name: Get Discount Game On Steam
+name: Free Games Collector
 
 on:
   schedule:
-    - cron: "0 16 * * *"
-    - cron: "0 4 * * *"
+    - cron: '0 2 * * *'
   workflow_dispatch:
 
 jobs:
@@ -16,20 +15,20 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: '3.11'
 
       - name: Install deps
         run: pip install -r requirements.txt
 
-      - name: Run script
+      - name: Run free games script
         env:
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
-        run: python main.py
+        run: python free_games.py
 
-      - name: Commit seen file
+      - name: Commit free history
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add seen.json
-          git commit -m "update seen" || exit 0
+          git add free_history.json || true
+          git commit -m "Update free_history" || exit 0
           git push
